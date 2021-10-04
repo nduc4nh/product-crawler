@@ -20,7 +20,7 @@ class ShopeeCrawler(Spider):
         self.name = name 
         self.start_urls = [r'https://shopee.vn/search?keyword=' + kwargs['category']]
         self.iter_stop = kwargs['page_num']
-        self.category = str(kwargs['category'])
+        self.category = int(kwargs['category'])
     
     def parse(self, response):
         self.count += 1
