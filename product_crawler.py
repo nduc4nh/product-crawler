@@ -9,6 +9,8 @@ page_num = 1
 
 from scrapy.crawler import CrawlerProcess
 from shopee.shopee.spiders.shopee import ShopeeCrawler
+from scrapy.utils.project import get_project_settings
+
 manual = """
     -t: the type of product
     -c: number of pages to crawl
@@ -40,7 +42,11 @@ try:
     if (not category) or err:
         print(reminder)
     else:
-        proc = CrawlerProcess()
+        settings = get_project_settings()
+        settings.set("MONGO_URI", "mongodb://localhost:27017/")
+        settings.set("MONGO_DATABASE", "products")
+        settings.set("ITEM_PIPELINES",{'shopee.shopee.pipelines.ShopeePipeline': 300})
+        proc = CrawlerProcess(settings)
         proc.crawl(ShopeeCrawler,'shopee', category = category, page_num = page_num)
         proc.start()
 except:

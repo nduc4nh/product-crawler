@@ -20,6 +20,7 @@ class ShopeeCrawler(Spider):
         self.name = name 
         self.start_urls = [r'https://shopee.vn/search?keyword=' + kwargs['category']]
         self.iter_stop = kwargs['page_num']
+        self.category = kwargs['category']
     
     def parse(self, response):
         self.count += 1
@@ -37,8 +38,10 @@ class ShopeeCrawler(Spider):
                 break
             driver.execute_script("window.scrollTo(0, %d);" %cur_height)
             time.sleep(1)
-  
+
         res = response.replace(body = driver.page_source)
+        driver.quit()
+
         products_name = res.xpath("//div[@class = '%s']" %FIELDS['name']).getall()
         products_price = res.xpath("//div[@class = '%s']" %FIELDS['price']).getall()
         products_location = res.xpath("//div[@class = '%s']" %FIELDS['location']).getall()
@@ -52,9 +55,9 @@ class ShopeeCrawler(Spider):
             item_loader.add_value("price",products_price[i])
             item_loader.add_value("location",products_location[i])
             item_loader.add_value("image",products_image[i])
+            item_loader._add_value("category", self.category)
             yield item_loader.load_item()
         
-        driver.quit()
         
         if self.count < self.iter_stop and n != 0:
             yield scrapy.Request(self.url + "&page="+ str(self.count), callback=self.parse)

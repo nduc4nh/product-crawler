@@ -12,3 +12,4 @@ class ShopeeItem(scrapy.Item):
     price = scrapy.Field()
     location = scrapy.Field()
     image = scrapy.Field()
+    category = scrapy.Field()
