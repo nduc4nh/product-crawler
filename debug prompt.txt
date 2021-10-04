@@ -1,0 +1,23 @@
+from selenium.webdriver import Chrome
+FIELDS = {"name":"_10Wbs- _5SSWfi UjjMrh", "price":"zp9xm9 xSxKlK _1heB4J", "location":"_1w5FgK", "image":"_3-N5L6 _2GchKS"}
+import time
+from selenium.webdriver import Chrome
+DRIVER_PATH = r'C:\Users\nguyenducanh\Desktop\product_crawler\drivers\chromedriver.exe'
+driver = Chrome(DRIVER_PATH)
+driver.get(response.url)
+last_height = driver.execute_script("return document.body.scrollHeight")
+last_width = driver.execute_script("return document.body.scrollWidth")//2
+unit_height = last_height//5
+cur_height = 0
+
+while True:
+  driver.execute_script("window.scrollTo(%d, %d);" %(last_width, cur_height))
+  time.sleep(1)
+  cur_height += unit_height
+  if cur_height >= last_height:
+    break
+  driver.execute_script("window.scrollTo(0, %d);" %cur_height)
+  time.sleep(1)
+
+res = response.replace(body = driver.page_source)
+driver.quit()
