@@ -10,7 +10,7 @@ from ..items import ShopeeItem
 import time
 
 class ShopeeCrawler(Spider):
-    DRIVER_PATH = r'drivers/chromedriver.exe'
+    DRIVER_PATH = r'drivers/chromedriver'
     count = 0
     name = "shopee"
     url = r'https://shopee.vn/search?keyword='
@@ -26,6 +26,7 @@ class ShopeeCrawler(Spider):
         self.count += 1
         driver = Chrome(self.DRIVER_PATH)
         driver.get(response.url)
+        time.sleep(5)
         last_height = driver.execute_script("return document.body.scrollHeight")
         unit_height = last_height//5
         cur_height = 0
@@ -60,4 +61,4 @@ class ShopeeCrawler(Spider):
         
         
         if self.count < self.iter_stop and n != 0:
-            yield scrapy.Request(self.url + "&page="+ str(self.count), callback=self.parse)
+            yield scrapy.Request(self.url + self.category + "&page="+ str(self.count), callback=self.parse)

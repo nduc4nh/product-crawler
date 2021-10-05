@@ -1,0 +1,2 @@
+p
+ython3 product_crawler -t "" -c 3 -l "mongodb"
